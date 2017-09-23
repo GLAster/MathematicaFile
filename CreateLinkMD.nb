@@ -1,0 +1,23 @@
+list = List[];
+url = "http://blog.csdn.net/gl486546/article/category/6389727/";
+catchPageElem[n_] := Block[{xml, len, d, i, temp},
+  xml = Import[url <> ToString[n], "XMLObject"];
+  d = Cases[xml,
+    XMLElement[
+      "span", {"class" -> "link_title"}, {XMLElement[
+        "a", {"shape" -> "rect", 
+         "href" -> 
+          href_}, {title_}], __}] :> {"http://blog.csdn.net" <> href, 
+      StringTrim[title]}, {0, Infinity}];
+  len = Length[d];
+  Do[AppendTo[list, d[[i]]], {i, 1, len}]
+  ]
+Do[catchPageElem[i], {i, 1, 14}];
+ans = SortBy[list, Last];
+len = Length[ans];
+str = "";
+Do[str = str <> "\n[" <> ToString[ans[[i]][[2]]] <> "]" <> "(" <> 
+    ToString[ans[[i]][[1]]] <> ")", {i, 1, len}];
+str;
+Export["C:\\Users\\gl486\\Desktop\\nb\\1.txt", str]
+len
