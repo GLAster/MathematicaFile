@@ -1,0 +1,65 @@
+list = List[];
+url = "https://www.patest.cn/contests/pat-a-practise/";
+num =;(*NOTICE HERE*)
+cppfile = "cpp.txt";
+str = Import[url <> ToString[num], "Source"];
+str = StringCases[str, 
+   "<div id='problemContent'>" ~~ __ ~~ "</div>\n\n<hr>"];
+str = StringInsert[str, " style='font-size:12px;'", 25];
+str = StringReplace[str, 
+   "<pre>" -> 
+    "<pre style=\"overflow:auto; \
+font-family:Menlo,Monaco,Consolas,&quot;Courier New&quot;,monospace; \
+font-size:13px; padding:9.5px; margin-top:0px; margin-bottom:10px; \
+line-height:1.42857; color:rgb(51,51,51); word-break:break-all; \
+word-wrap:break-word; background-color:rgb(245,245,245); border:1px \
+solid rgb(204,204,204)\">"];
+code = Import["C:\\Users\\gl486\\Desktop\\nb\\cpp.txt"];
+(*替换特殊字符*)
+code = StringReplace[
+   code, {"<" -> "&lt;", ">" -> "&gt;", "  " -> "&nbsp; ", 
+    "\"" -> "&quot;"}];
+(*替换数字*)
+(*numlist=DeleteDuplicates[StringCases[code,RegularExpression["[-+]?\d\
++(\.\d+)?"]]]
+nll=Length[numlist];
+Do[code=StringReplace[code,numlist[[i]]->"<span \
+style='color:#9400D3;'>"<>numlist[[i]]<>"</span>"],{i,1,nll}];*)
+(*替换关键字*)
+code = StringReplace[
+   code, {"#include" -> "<span style='color:#FF34B3;'>#include</span>",
+    "using namespace" -> 
+     "<span style='color:#FF34B3;'>using namespace</span>",
+    "int " -> "<span style='color:#20B2AA;'>int </span>", 
+    "bool " -> "<span style='color:#20B2AA;'>bool </span>",
+    "void " -> "<span style='color:#20B2AA;'>void </span>", 
+    "long " -> "<span style='color:#20B2AA;'>long </span>", 
+    "char " -> "<span style='color:#20B2AA;'>char </span>", 
+    "string " -> "<span style='color:#20B2AA;'>string </span>",
+    "double " -> "<span style='color:#20B2AA;'>double </span>", 
+    "struct " -> "<span style='color:#20B2AA;'>struct </span>", 
+    "class " -> "<span style='color:#20B2AA;'>class </span>", 
+    "for" -> "<span style='color:#D02090;'>for</span>", 
+    "return" -> "<span style='color:#D02090;'>return</span>", 
+    "const" -> "<span style='color:#D02090;'>const</span>", 
+    "while" -> "<span style='color:#D02090;'>while</span>", 
+    "if(" -> "<span style='color:#D02090;'>if</span>(", 
+    "else" -> "<span style='color:#D02090;'>else</span>", 
+    "=" -> "<span style='color:#D02090;'>=</span>"}];
+(*替换头文件*)
+headlist = StringCases[code, RegularExpression[" &lt;[a-z]+&gt;"]];
+hll = Length[headlist];
+Do[code = 
+   StringReplace[code, 
+    headlist[[i]] -> 
+     "<span style='color:#CD8500;'>" <> headlist[[i]] <> 
+      "</span>"], {i, 1, hll}];
+(*替换字符串*)
+art = str <> 
+   "<pre style=\"overflow:auto; \
+font-family:Menlo,Monaco,Consolas,&quot;Courier New&quot;,monospace; \
+font-size:13px; padding:9.5px; margin-top:0px; margin-bottom:10px; \
+line-height:1.42857; color:rgb(207,207,207); word-break:break-all; \
+word-wrap:break-word; background-color:rgb(30,30,30); border:1px \
+solid rgb(204,204,204)\">" <> code <> "</pre>";
+Export["C:\\Users\\gl486\\Desktop\\nb\\art.txt", art]
