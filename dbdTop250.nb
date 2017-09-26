@@ -1,0 +1,36 @@
+list = List[];
+url = "https://book.douban.com/top250?start=";
+BookDouBan[n_] := Block[{xml, d, len, i, temp},
+  xml = Import[url <> ToString[n 25], "XMLObject"];
+  d = Cases[xml,
+    XMLElement[
+       "div", {"class" -> __}, {__, 
+        XMLElement[
+         "a", {"shape" -> "rect", "href" -> hreflink_, 
+          "onclick" -> __, "title" -> bookname_}, {__}], __, 
+        XMLElement[
+         "img", {"src" -> bookimg_, "alt" -> __, 
+          "title" -> __}, {}], __, 
+        XMLElement["br", {"clear" -> "none"}, {}], __, 
+        XMLElement["span", {__}, {booknameE_}], __}] |
+      XMLElement[
+       "div", {"class" -> __}, {__, 
+        XMLElement[
+         "a", {"shape" -> "rect", "href" -> hreflink_, 
+          "onclick" -> __, "title" -> bookname_}, {__}], __, 
+        XMLElement["br", {"clear" -> "none"}, {}], __, 
+        XMLElement["span", {_}, {booknameE_}], __}] |
+      XMLElement[
+       "div", {"class" -> __}, {__, 
+        XMLElement[
+         "a", {"shape" -> "rect", "href" -> hreflink_, 
+          "onclick" -> __, 
+          "title" -> bookname_}, {__}], __}] :> {hreflink, bookname, 
+      booknameE, bookimg}, {0, Infinity}];
+  len = Length[d];
+  For[i = 1, i <= len, ++i, AppendTo[list, d[[i]]]];
+  ]
+For[i = 0, i < 10, ++i, BookDouBan[i]]
+Length[list]
+list
+Export["C:\\Users\\gl486\\Desktop\\dob.txt", list]
