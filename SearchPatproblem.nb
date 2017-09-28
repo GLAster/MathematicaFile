@@ -1,0 +1,18 @@
+purl = "https://www.patest.cn/contests/pat-a-practise/";
+pnum = "1007";(*prblem number*)
+phtml = Import[purl <> pnum, "Source"];
+pcontent = 
+  StringCases[phtml, 
+    RegularExpression[
+     "(<div id='problemContent'>)(.|\n)+(</div>\n\n<hr>)"]][[1]];
+pcontent = 
+  StringReplace[
+   pcontent, {"<div id='problemContent'>" -> 
+     "<div id='problemContent' style='font-size:12px'>", 
+    "<pre>" -> 
+     "<pre style=\"overflow:auto; \
+font-family:Menlo,Monaco,Consolas,&quot;Courier New&quot;,monospace; \
+font-size:13px; padding:9.5px; margin-top:0px; margin-bottom:10px; \
+line-height:1.42857; color:rgb(51,51,51); word-break:break-all; \
+word-wrap:break-word; background-color:rgb(245,245,245); border:1px \
+solid rgb(204,204,204)\">"}];
