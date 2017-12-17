@@ -4,7 +4,7 @@
 
 **顶顶顶顶**
 
-```
+```c++
 #include <stdio.h>
 int main()
 {
